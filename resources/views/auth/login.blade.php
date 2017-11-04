@@ -8,6 +8,20 @@
                 <div class="panel-heading">Login</div>
 
                 <div class="panel-body">
+    
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-8">
+                            <a href="{{ url('login/facebook') }}" class="btn btn-primary btn-block">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> Log in with Facebook
+                            </a>
+                            <a href="{{ url('login/github') }}" class="btn btn-primary btn-block">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> Log in with Github
+                            </a>
+                        </div>
+                    </div>
+
+                    <p>Or</p>
+
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 
