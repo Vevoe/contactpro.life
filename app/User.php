@@ -27,4 +27,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Relationships
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }

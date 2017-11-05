@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return 'home';
-});
-
 
 // Social Logins...
 Route::get('/login/{social}','Auth\LoginController@socialLogin')
@@ -39,5 +35,6 @@ Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetFor
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 
 
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('contacts', 'ContactController', ['only' => ['index', 'destroy']]);
+});

@@ -20,7 +20,7 @@ class UserService
                 $q->where('provider', $provider)
                     ->where('provider_id', $user->id);
             })
-            ->orWhere('email', $user->email)
+            ->orWhere('email', $user->email) // We're assuming this is only ever called for social logins
             ->first();
 
         if ($authUser) {

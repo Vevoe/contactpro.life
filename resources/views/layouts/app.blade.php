@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Contact Pro</title>
+    <title>ContactsPro</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -28,8 +28,8 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        Contact Pro
+                    <a class="navbar-brand" href="{{ route('contacts.index') }}">
+                        <i><strong>Contacts</strong>Pro</i>
                     </a>
                 </div>
 
@@ -75,6 +75,52 @@
     </div>
 
     <!-- Scripts -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script id="customFieldTemplate" type="text/x-custom-template">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" name="customFields[]" class="form-control" value="<%- value %>">
+            <span class="input-group-btn">
+              <button type="button" add-custom-field class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+              <button type="button" remove-custom-field class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span></button>
+            </span>
+          </div>
+        </div>
+    </script>
+     <script id="newRowTemplate" type="text/x-custom-template">
+        <tr contactRow="<%- id %>">
+            <td name><%- name %></td>
+            <td surname><%- surname %></td>
+            <td email><%- email %></td>
+            <td phone><%- phone %></td>
+            <td customFields><%- customFields %></td>
+            <td class="text-right">
+                <button type="button" editContact="<%- id %>" class="btn btn-warning btn-xs">Edit</button>
+                <form
+                    method="POST" 
+                    action="/contacts/<%- id %>"
+                    style="display: inline;"">
+                    {{ csrf_field() }}
+                    {{ method_field('DELETE') }}
+                    <button
+                        type="submit"
+                        class="btn btn-danger btn-xs"
+                        delete-contact-button="<%- id %>"
+                        data-toggle="modal"
+                        data-target="#deleteContactModal">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </script> 
+    <script src="{{ asset('js/vendor.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

@@ -11,5 +11,10 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix.scripts([
+        'node_modules/lodash/lodash.js',
+        'node_modules/jquery-validation/dist/jquery.validate.js',
+        'node_modules/tableable/dist/jquery.tableable.js'
+    ], 'public/js/vendor.js')
+    .js('resources/assets/js/app.js', 'public/js')
+    .sass('resources/assets/sass/app.scss', 'public/css');
