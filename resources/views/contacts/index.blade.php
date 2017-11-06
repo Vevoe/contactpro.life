@@ -29,7 +29,7 @@
                             data-target="#createContactModal">
                             Create Contact
                         </button>
-                        Contacts
+                        <h2>Contact List</h2>
                     </div>
                     <div class="panel-body">
                         

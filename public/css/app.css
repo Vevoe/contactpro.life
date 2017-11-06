@@ -8350,3 +8350,15 @@ button.close {
   }
 }
 
+.login-text {
+  text-align: center;
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+.panel-heading > h2 {
+  margin: 0px;
+  margin-top: 3px;
+  font-size: 24px;
+}
+

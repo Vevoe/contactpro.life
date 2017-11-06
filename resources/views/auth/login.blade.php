@@ -12,15 +12,15 @@
                     <div class="row">
                         <div class="col-md-offset-2 col-md-8">
                             <a href="{{ url('login/facebook') }}" class="btn btn-primary btn-block">
-                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> Log in with Facebook
+                                Log in with Facebook
                             </a>
                             <a href="{{ url('login/github') }}" class="btn btn-primary btn-block">
-                                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> Log in with Github
+                                Log in with Github
                             </a>
                         </div>
                     </div>
 
-                    <p>Or</p>
+                    <p class="login-text">Or Create an Account</p>
 
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
@@ -69,9 +69,9 @@
                                     Login
                                 </button>
 
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
+                                {{-- <a class="btn btn-link" href="{{ route('password.request') }}">
                                     Forgot Your Password?
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </form>
