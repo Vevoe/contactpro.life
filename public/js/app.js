@@ -200,7 +200,7 @@ window.contactsPro = {
                     errorObject[key] = value;
                 });
 
-                var validator = $("#createContactForm").validate();
+                var validator = $("#updateContactForm").validate();
                 validator.showErrors(errorObject);
 
                 // Internal Error, probably with Active Campaign
