@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Contact;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactRequest extends FormRequest
@@ -24,13 +25,33 @@ class ContactRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name'              => 'required|max:255',
             'surname'           => 'required|max:255',
-            'email'             => 'required|email|max:255',
-            'phone'             => 'required|max:255',
+            'email'             => 'required|email|max:255|unique:contacts',
+            'phone'             => 'required|numeric|max:9999999999',
             'customFields'      => 'nullable|array|max:5',
             'customFields.*'    => 'max:255'
         ];
+
+        // Update on email validation with put requests, otherwise
+        // just return the $rules
+        switch ($this->method()) {
+            case 'PUT':
+                return array_merge($rules, [
+                    'email' => [
+                        'required',
+                        'email',
+                        'max:255',
+                        Rule::unique('contacts')
+                            ->ignore($this->contact->id)
+                    ]
+                ]);
+                break;
+            
+            default:
+                return $rules;
+                break;
+        }
     }
 }

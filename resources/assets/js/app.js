@@ -30,7 +30,8 @@ window.contactsPro = {
             },
             phone: {
               required: true,
-              maxlength: 255
+              maxlength: 255,
+              number: true
             }
         }
     },
