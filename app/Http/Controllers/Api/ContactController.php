@@ -50,9 +50,23 @@ class ContactController extends Controller
     public function store(ContactRequest $request)
     {
         $user = Auth::user();
-        $newContact = $this->contactService->create($user, $request->input());
 
-        return new ContactResource($newContact);
+        // Save on Active Campaign saving creating locally
+        $acResponse = $this->contactService->sendActiveCampaignSync($request->input());
+        
+        if (!(int)$acResponse->success) {
+            return response()->json([
+                'errors'    => [],
+                'message'   => 'An error occurred. Please refresh your page and try again.'
+            ], 502);
+        } else {
+            $newContact = $this->contactService->create($user, array_merge(
+                $request->input(),
+                ['active_campaign_id' => $acResponse->subscriber_id]
+            ));
+
+            return new ContactResource($newContact);
+        }
     }
 
     /**
@@ -88,10 +102,22 @@ class ContactController extends Controller
     {
         $this->authorize('update', $contact);
         
-        $user = Auth::user();
-        $updatedContact = $this->contactService->update($contact, $request->input());
+        // Save on Active Campaign saving creating locally
+        $acResponse = $this->contactService->sendActiveCampaignSync($request->input());
 
-        return new ContactResource($updatedContact);
+        if (!(int)$acResponse->success) {
+            return response()->json([
+                'errors'    => [],
+                'message'   => 'An error occurred. Please refresh your page and try again.'
+            ], 502);
+        } else {
+            $updatedContact = $this->contactService->update($contact, array_merge(
+                $request->input(),
+                ['active_campaign_id' => $acResponse->subscriber_id]
+            ));
+
+            return new ContactResource($updatedContact);
+        }        
     }
 
     /**

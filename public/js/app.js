@@ -165,6 +165,11 @@ window.contactsPro = {
 
                 var validator = $("#createContactForm").validate();
                 validator.showErrors(errorObject);
+
+                // Internal Error, probably with Active Campaign
+                if (err.status >= 500) {
+                    alert(err.responseJSON.message);
+                }
             });
         }
     },
@@ -196,6 +201,11 @@ window.contactsPro = {
 
                 var validator = $("#createContactForm").validate();
                 validator.showErrors(errorObject);
+
+                // Internal Error, probably with Active Campaign
+                if (err.status >= 500) {
+                    alert(err.responseJSON.message);
+                }
             });
         }
     }
@@ -261,8 +271,6 @@ $(document).ready(function () {
             url: '/api/contacts/' + $(this).attr('editContact'),
             method: 'GET'
         }).done(function (res) {
-            console.log("successs here: ", res);
-
             // Populate form values
             $('#updateContactForm input[name="id"]').val(res.data.id);
             $('#updateContactForm input[name="name"]').val(res.data.name);

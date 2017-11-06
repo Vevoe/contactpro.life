@@ -12,7 +12,7 @@ class Contact extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'phone'
+        'active_campaign_id', 'name', 'surname', 'email', 'phone'
     ];
 
     /**

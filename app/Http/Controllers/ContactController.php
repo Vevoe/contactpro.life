@@ -5,9 +5,19 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Contact;
 use Illuminate\Http\Request;
+use App\Services\ContactService;
 
 class ContactController extends Controller
 {
+    /**
+     * Inject needed Services
+     * @param ContactService $contactService
+     */
+    public function __construct(ContactService $contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -86,10 +96,17 @@ class ContactController extends Controller
     {
         $this->authorize('delete', $contact);
 
-        $contact->delete();
+        // Delete from Active campaign before deleting locally
+        $acResponse = $this->contactService->sendActiveCampaignDelete($contact->active_campaign_id);
 
-        return redirect()
-            ->route('contacts.index')
-            ->with('successMessage', "Conatct \"{$contact->name} {$contact->surname}\" has been deleted.");
+        if (!(int)$acResponse->success) {
+            dd('Request Failed');
+        } else {
+            $contact->delete();
+
+            return redirect()
+                ->route('contacts.index')
+                ->with('successMessage', "Conatct \"{$contact->name} {$contact->surname}\" has been deleted.");
+        }
     }
 }

@@ -44,6 +44,44 @@ class ContactService
     }
 
     /**
+     * Creates or updates a Contact in Active Campaign db, synced by email
+     * @param  $array $data
+     * @return acResponse
+     */
+    public function sendActiveCampaignSync($data)
+    {
+        $ac = $this->initActiveCampaign();
+
+        $contact = [
+            'email'         => $data['email'],
+            'first_name'    => $data['name'],
+            'last_name'     => $data['surname'],
+            'phone'         => $data['phone'],
+        ];
+
+        return $ac->api("contact/sync", $contact);
+    }
+
+    /**
+     * Sends a request to Active Campaign to delete a contact
+     * @param  int $ACId
+     * @return acReponse
+     */
+    public function sendActiveCampaignDelete($ACId)
+    {
+        $ac = $this->initActiveCampaign();
+        return $ac->api("contact/delete?id={$ACId}");
+    }
+
+    protected function initActiveCampaign()
+    {
+        return new \ActiveCampaign(
+            env('ACTIVE_CAMPAIGN_URL'),
+            env('ACTIVE_CAMPAIGN_KEY')
+        );
+    }
+
+    /**
      * Return an array ready to be inserted into the createMany
      * method for a contacts customFields
      * @param  array $customFields
