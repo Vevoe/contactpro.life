@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomFieldsTable extends Migration
+class CreateSocialProvidersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateCustomFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('custom_fields', function (Blueprint $table) {
+        Schema::create('social_providers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('contact_id')->unsigned();
-            $table->string('value');
+            $table->integer('user_id')->unsigned();
+            $table->string('provider');
+            $table->string('provider_id');
             $table->timestamps();
 
-            $table->foreign('contact_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('contacts')
+                ->on('users')
                 ->onDelete('cascade');
-
         });
     }
 
@@ -34,6 +34,6 @@ class CreateCustomFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_fields');
+        Schema::dropIfExists('social_providers');
     }
 }

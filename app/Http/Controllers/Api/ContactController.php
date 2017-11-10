@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Api;
 use Auth;
 use App\Contact;
 use Illuminate\Http\Request;
+
+
+use App\Events\CreatedContact;
+use App\Events\UpdatedContact;
+
 use App\Services\ContactService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
@@ -51,22 +56,11 @@ class ContactController extends Controller
     {
         $user = Auth::user();
 
-        // Save on Active Campaign saving creating locally
-        $acResponse = $this->contactService->sendActiveCampaignSync($request->input());
-        
-        if (!(int)$acResponse->success) {
-            return response()->json([
-                'errors'    => [],
-                'message'   => 'An error occurred. Please refresh your page and try again.'
-            ], 502);
-        } else {
-            $newContact = $this->contactService->create($user, array_merge(
-                $request->input(),
-                ['active_campaign_id' => $acResponse->subscriber_id]
-            ));
+        $newContact = $this->contactService->create($user, $request->input());
 
-            return new ContactResource($newContact);
-        }
+        event(new CreatedContact($newContact, $user->list_id));
+
+        return new ContactResource($newContact);
     }
 
     /**
@@ -101,23 +95,14 @@ class ContactController extends Controller
     public function update(ContactRequest $request, Contact $contact)
     {
         $this->authorize('update', $contact);
+
+        $user = Auth::user();
         
-        // Save on Active Campaign saving creating locally
-        $acResponse = $this->contactService->sendActiveCampaignSync($request->input());
+        $updatedContact = $this->contactService->update($contact, $request->input());     
+        
+        event(new UpdatedContact($updatedContact, $user->list_id));
 
-        if (!(int)$acResponse->success) {
-            return response()->json([
-                'errors'    => [],
-                'message'   => 'An error occurred. Please refresh your page and try again.'
-            ], 502);
-        } else {
-            $updatedContact = $this->contactService->update($contact, array_merge(
-                $request->input(),
-                ['active_campaign_id' => $acResponse->subscriber_id]
-            ));
-
-            return new ContactResource($updatedContact);
-        }        
+        return new ContactResource($updatedContact);
     }
 
     /**

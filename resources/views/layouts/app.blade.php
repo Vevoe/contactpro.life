@@ -85,7 +85,7 @@
     <script id="customFieldTemplate" type="text/x-custom-template">
         <div class="form-group">
           <div class="input-group">
-            <input type="text" name="customFields[]" class="form-control" value="<%- value %>">
+            <input type="text" name="customFields[custom_<%- fieldName %>]" class="form-control" value="<%- value %>">
             <span class="input-group-btn">
               <button type="button" add-custom-field class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
               <button type="button" remove-custom-field class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span></button>
@@ -93,7 +93,7 @@
           </div>
         </div>
     </script>
-     <script id="newRowTemplate" type="text/x-custom-template">
+    <script id="newRowTemplate" type="text/x-custom-template">
         <tr contactRow="<%- id %>">
             <td name><%- name %></td>
             <td surname><%- surname %></td>

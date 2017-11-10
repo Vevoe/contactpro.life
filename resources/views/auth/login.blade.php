@@ -20,7 +20,7 @@
                         </div>
                     </div>
 
-                    <p class="login-text">Or Create an Account</p>
+                    <p class="login-text">Log In with Email</p>
 
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
