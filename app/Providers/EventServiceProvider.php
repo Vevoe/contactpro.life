@@ -13,11 +13,29 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        'Illuminate\Auth\Events\Registered' => [
+            'App\Listeners\RegisterUser'
         ],
+        'App\Events\CreatedContact' => [
+            'App\Listeners\CreateContact',
+        ],
+        'App\Events\UpdatedContact' => [
+            'App\Listeners\UpdateContact'
+        ],
+        'App\Events\DeletedContact' => [
+            'App\Listeners\DeleteContact'
+        ]
     ];
 
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'App\Listeners\ContactEventSubscriber',
+    ];
+    
     /**
      * Register any events for your application.
      *

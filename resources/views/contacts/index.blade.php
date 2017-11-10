@@ -49,11 +49,15 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="text" id="searchBox" class="form-control input-lg"
-                                                placeholder="Search by Surname, Email or Phone">
                                             <span class="input-group-addon">
                                               <span class="glyphicon glyphicon-search"></span>
                                             </span>
+                                            <input
+                                                type="text"
+                                                id="searchBox"
+                                                class="form-control input-lg"
+                                                placeholder="Search by Surname, Email or Phone"
+                                            >
                                         </div>
                                     </div>
                                 </div>

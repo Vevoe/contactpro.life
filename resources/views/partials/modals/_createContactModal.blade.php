@@ -45,7 +45,7 @@
 
             </div><!-- /.row -->
             <div class="row">
-              <div class="col-sm-8">
+              <div class="col-sm-10">
 
 
                 <h3>Custom Fields:</h3>
@@ -53,15 +53,24 @@
                 <div class="custom-fields-container">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" name="customFields[]" class="form-control">
+                      <input type="text" name="customFields[custom_1]" class="form-control">
                       <span class="input-group-btn">
-                        <button type="button" add-custom-field class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></button>
-                        <button type="button" remove-custom-field class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span></button>
+                        <button
+                          type="button"
+                          add-custom-field
+                          class="btn btn-success">
+                          <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button 
+                          type="button"
+                          remove-custom-field
+                          class="btn btn-danger">
+                          <span class="glyphicon glyphicon-minus"></span>
+                        </button>
                       </span>
                     </div>
                   </div>
                 </div>
-
 
                 <span id="helpBlock" class="help-block">* Indicates required fields</span>
               </div>

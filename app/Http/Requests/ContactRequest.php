@@ -28,7 +28,6 @@ class ContactRequest extends FormRequest
         $rules = [
             'name'              => 'required|max:255',
             'surname'           => 'required|max:255',
-            'email'             => 'required|email|max:255|unique:contacts',
             'phone'             => 'required|numeric|max:9999999999',
             'customFields'      => 'nullable|array|max:5',
             'customFields.*'    => 'max:255'
@@ -37,6 +36,17 @@ class ContactRequest extends FormRequest
         // Update on email validation with put requests, otherwise
         // just return the $rules
         switch ($this->method()) {
+            case 'POST':
+                return array_merge($rules, [
+                    'email' => [
+                        'required',
+                        'email',
+                        'max:255',
+                        Rule::unique('contacts')
+                            ->where('user_id', $this->user()->id)
+                    ]
+                ]);
+                break;
             case 'PUT':
                 return array_merge($rules, [
                     'email' => [
@@ -45,6 +55,7 @@ class ContactRequest extends FormRequest
                         'max:255',
                         Rule::unique('contacts')
                             ->ignore($this->contact->id)
+                            ->where('user_id', $this->user()->id)
                     ]
                 ]);
                 break;

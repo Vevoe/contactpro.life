@@ -158,6 +158,13 @@ window.contactsPro = {
                 $('.contacts-container').removeClass('hidden');
                 $('#createContactForm .custom-fields-container > .form-group').not(':first').remove();
                 $('#createContactForm').trigger('reset');
+
+                $.toast({
+                    heading: 'Success!',
+                    text: 'Conatct has been created.',
+                    position: 'top-right',
+                    icon: 'success'
+                });
             }).fail(function (err) {
                 var errorObject = {};
                 $.each(err.responseJSON.errors, function (key, value) {
@@ -167,9 +174,15 @@ window.contactsPro = {
                 var validator = $("#createContactForm").validate();
                 validator.showErrors(errorObject);
 
-                // Internal Error, probably with Active Campaign
+                // Internal Error. Show generic error message and preferably
+                // log to some sort of logging service
                 if (err.status >= 500) {
-                    alert(err.responseJSON.message);
+                    $.toast({
+                        heading: 'Error!',
+                        text: 'An Error as occurred. Please contact support.',
+                        position: 'top-right',
+                        icon: 'error'
+                    });
                 }
             });
         }
@@ -187,13 +200,22 @@ window.contactsPro = {
             }).done(function (res) {
                 var customFieldsString = window.contactsPro.buildCustomFieldsString(res.data.customFields);
 
-                $('table tr[contactRow="' + res.data.id + '"]').find('td[name]').html(res.data.name);
-                $('table tr[contactRow="' + res.data.id + '"]').find('td[surname]').html(res.data.surname);
-                $('table tr[contactRow="' + res.data.id + '"]').find('td[email]').html(res.data.email);
-                $('table tr[contactRow="' + res.data.id + '"]').find('td[phone]').html(res.data.phone);
-                $('table tr[contactRow="' + res.data.id + '"]').find('td[customFields]').html(customFieldsString);
+                $('table tr[contactRow="' + res.data.id + '"]').find('td[name]').text(res.data.name);
+                $('table tr[contactRow="' + res.data.id + '"]').find('td[surname]').text(res.data.surname);
+                $('table tr[contactRow="' + res.data.id + '"]').find('td[email]').text(res.data.email);
+                $('table tr[contactRow="' + res.data.id + '"]').find('td[phone]').text(res.data.phone);
+                $('table tr[contactRow="' + res.data.id + '"]').find('td[customFields]').text(customFieldsString);
 
                 $('#updateContactModal').modal('hide');
+                $('#updateContactForm .custom-fields-container > .form-group').remove();
+                $('#updateContactForm').trigger('reset');
+
+                $.toast({
+                    heading: 'Success!',
+                    text: 'Conatct has been updated.',
+                    position: 'top-right',
+                    icon: 'success'
+                });
             }).fail(function (err) {
                 var errorObject = {};
                 $.each(err.responseJSON.errors, function (key, value) {
@@ -203,9 +225,15 @@ window.contactsPro = {
                 var validator = $("#updateContactForm").validate();
                 validator.showErrors(errorObject);
 
-                // Internal Error, probably with Active Campaign
+                // Internal Error. Show generic error message and preferably
+                // log to some sort of logging service
                 if (err.status >= 500) {
-                    alert(err.responseJSON.message);
+                    $.toast({
+                        heading: 'Error!',
+                        text: 'An Error as occurred. Please contact support.',
+                        position: 'top-right',
+                        icon: 'error'
+                    });
                 }
             });
         }
@@ -234,24 +262,30 @@ $(document).ready(function () {
     // Add custom Field
     $(document).on('click', 'button[add-custom-field]', function () {
         var formId = $(this).closest('form').attr('id');
-        var customFieldCount = $('#' + formId + ' input[name="customFields[]"]').length;
+        var customFieldCount = $('#' + formId + ' .custom-fields-container input').length;
 
         if (customFieldCount < 5) {
             var customFieldTemplate = _.template($('#customFieldTemplate').html());
-            $('#' + formId + ' .custom-fields-container').append(customFieldTemplate({ value: '' }));
+            $('#' + formId + ' .custom-fields-container').append(customFieldTemplate({
+                fieldName: ++customFieldCount,
+                value: ''
+            }));
         }
     });
 
     // Remove custom Field
     $(document).on('click', 'button[remove-custom-field]', function () {
         var formId = $(this).closest('form').attr('id');
-        var customFieldCount = $('#' + formId + ' input[name="customFields[]"]').length;
+        var customFieldCount = $('#' + formId + ' .custom-fields-container input').length;
 
         if (customFieldCount > 1) {
             $(this).closest('.form-group').remove();
         }
     });
 
+    /**
+     * Modal
+     */
     // Hide modal, reset form.
     $('button[cancel-contact]').on('click', function () {
         var formId = $(this).closest('form').attr('id');
@@ -284,15 +318,30 @@ $(document).ready(function () {
             var customField = _.template($('#customFieldTemplate').html());
             if (res.data.customFields.length > 0) {
                 $.each(res.data.customFields, function (key, value) {
-                    $('#updateContactForm .custom-fields-container').append(customField({ value: value.value }));
+                    $('#updateContactForm .custom-fields-container').append(customField({
+                        fieldName: ++key,
+                        value: value.value
+                    }));
                 });
             } else {
-                $('#updateContactForm .custom-fields-container').append(customField({ value: '' }));
+                $('#updateContactForm .custom-fields-container').append(customField({
+                    fieldName: 1,
+                    value: ''
+                }));
             }
 
             $('#updateContactModal').modal('show');
         }).fail(function (err) {
-            console.log("Error here: ", err);
+            // Show message, preferably log to some sort of 
+            // erorr logger.
+            if (err.status >= 500) {
+                $.toast({
+                    heading: 'Error!',
+                    text: 'An Error as occurred. Please contact support.',
+                    position: 'top-right',
+                    icon: 'error'
+                });
+            }
         });
     });
 
