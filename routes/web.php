@@ -38,3 +38,12 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('contacts', 'ContactController', ['only' => ['index', 'destroy']]);
 });
+
+Horizon::auth(function ($request) {
+    $user = \Auth()->user(); 
+    if ($user && $user->email === 'michael_rice@live.com') {
+        return true;
+    }
+
+    return abort(404, 'Page not found.');
+});
