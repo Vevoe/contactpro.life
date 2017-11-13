@@ -59,11 +59,19 @@ class LoginController extends Controller
      */
     public function handleProviderCallback($social)
     {
-        $socialUser = Socialite::driver($social)->user();
+        try {
+            $socialUser = Socialite::driver($social)->user();
 
-        $authUser = $this->userService->handleSocialLogin($socialUser, $social);
-        Auth::login($authUser, true);
+            $authUser = $this->userService->handleSocialLogin($socialUser, $social);
+            Auth::login($authUser, true);
 
-        return redirect($this->redirectTo);
+            return redirect($this->redirectTo);
+        } catch (\Exception $e) {
+            $siteName = ucfirst($social);
+
+            return redirect()
+                ->route('login')
+                ->with('errorMessage', "You must allow {$siteName} access to proceed.");
+        }
     }
 }

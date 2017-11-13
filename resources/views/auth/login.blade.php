@@ -9,6 +9,17 @@
 
                 <div class="panel-body">
     
+                    @if(session('errorMessage'))
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="alert alert-dismissable alert-danger">
+                                    <span class="glyphicon glyphicon-remove"></span> {{ session('errorMessage') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="row">
                         <div class="col-md-offset-2 col-md-8">
                             <a href="{{ url('login/facebook') }}" class="btn btn-primary btn-block">

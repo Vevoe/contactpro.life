@@ -34,10 +34,14 @@ Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail
 Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 
+
+
 // App Routes...
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('contacts', 'ContactController', ['only' => ['index', 'destroy']]);
 });
+
+
 
 Horizon::auth(function ($request) {
     $user = \Auth()->user(); 
